@@ -1,8 +1,30 @@
 {
   "pages": [
+    "pages/start/start",
+    "pages/startDetail/startDetail",
+    "pages/report/report",
+    "pages/reportDetail/reportDetail",
+    "pages/end/end",
+    "pages/endDetail/endDetail",
     "pages/index/index",
     "pages/logs/logs"
   ],
+  "tabBar": {
+    "list": [
+      {
+        "pagePath": "pages/start/start",
+        "text": "开工"
+      },
+      {
+        "pagePath": "pages/report/report",
+        "text": "报工"
+      },
+      {
+        "pagePath": "pages/end/end",
+        "text": "完工"
+      }
+    ]
+  },
   "window": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Weixin",

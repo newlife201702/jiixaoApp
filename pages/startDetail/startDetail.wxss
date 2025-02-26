@@ -1,0 +1,65 @@
+/* 页面容器 */
+.container {
+    padding: 20px;
+  }
+  
+  /* 卡片样式 */
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .card-item {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  /* 表单样式 */
+  .form {
+    margin-top: 20px;
+  }
+  
+  .form-item {
+    margin-bottom: 20px;
+  }
+  
+  .label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+    display: block;
+  }
+  
+  .input {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .picker {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .picker-text {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  /* 提交按钮 */
+  .submit-button {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #07c160;
+    color: #fff;
+    text-align: center;
+    padding: 15px;
+    font-size: 16px;
+  }

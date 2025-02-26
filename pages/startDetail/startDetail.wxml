@@ -1,0 +1,34 @@
+<view class="container">
+  <!-- 顶部信息卡片 -->
+  <view class="card">
+    <view class="card-item">产品代码: {{productCode}}</view>
+    <view class="card-item">任务号: {{taskNumber}}</view>
+    <view class="card-item">批次号: {{batchNumber}}</view>
+    <view class="card-item">图号: {{drawingNumber}}</view>
+    <view class="card-item">产品名称: {{productName}}</view>
+    <view class="card-item">员工ID: {{employeeName}}</view>
+  </view>
+
+  <!-- 表单区域 -->
+  <view class="form">
+    <view class="form-item">
+      <text class="label">设备ID</text>
+      <input class="input" placeholder="请输入设备ID" bindinput="onDeviceIdInput" />
+    </view>
+    <view class="form-item">
+      <text class="label">工序</text>
+      <picker class="picker" mode="selector" range="{{processList}}" bindchange="onProcessChange">
+        <view class="picker-text">{{selectedProcess || '请选择工序'}}</view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="label">开始时间</text>
+      <picker class="picker" mode="date" bindchange="onStartTimeChange">
+        <view class="picker-text">{{startTime || '请选择开始时间'}}</view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="submit-button" bindtap="submit">提交</view>
+</view>

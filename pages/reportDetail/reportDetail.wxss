@@ -1,0 +1,2 @@
+/* 复用开工详情页面的样式 */
+@import "../startDetail/startDetail.wxss";

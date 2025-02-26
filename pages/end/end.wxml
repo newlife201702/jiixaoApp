@@ -1,0 +1,3 @@
+<view class="container">
+  <button bindtap="scanCode" disabled="{{isButtonDisabled}}">完工</button>
+</view>

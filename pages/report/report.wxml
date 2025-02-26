@@ -1,0 +1,3 @@
+<view class="container">
+  <button bindtap="scanCode" disabled="{{isButtonDisabled}}">报工</button>
+</view>
