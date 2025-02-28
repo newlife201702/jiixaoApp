@@ -13,7 +13,9 @@ App({
           if (res.code) {
             wx.request({
             //   url: 'http://localhost:3000/auth',
-              url: 'https://8f98-2409-8929-7058-9626-462-76b0-dbe0-14b2.ngrok-free.app/auth',
+            //   url: 'https://8f98-2409-8929-7058-9626-462-76b0-dbe0-14b2.ngrok-free.app/auth',
+              url: 'https://tongjishuju.weimeigu.com.cn/auth',
+            //   url: 'http://47.117.173.54:2909/auth',
               method: 'POST',
               data: { code: res.code },
               success: authRes => {
@@ -24,6 +26,25 @@ App({
                 that.globalData.isRegistered = true;
                 that.globalData.openid = authRes.data.openid;
                 that.globalData.employeeName = authRes.data.name;
+                wx.request({
+                  url: 'https://tongjishuju.weimeigu.com.cn/params',
+                  method: 'GET',
+                  success: paramsRes => {
+                    console.log('paramsRes.data', paramsRes.data);
+                    if (paramsRes.data.appid) {
+                    that.globalData.appid = paramsRes.data.appid;
+                    that.globalData.appsecret = paramsRes.data.appsecret;
+                    that.globalData.apptoken = paramsRes.data.apptoken;
+                    that.globalData.tableid = paramsRes.data.tableid;
+                    } else {
+                      wx.showModal({
+                        title: '提示',
+                        content: '获取参数失败',
+                        showCancel: false
+                      });
+                    }
+                  }
+                });
                 } else {
                 console.log('else');
                   wx.showModal({
@@ -83,6 +104,10 @@ App({
     openid: null,
     employeeName: null,
     tenantAccessToken: null,
-    tokenExpireTime: 0
+    tokenExpireTime: 0,
+    appid: '',
+    appsecret: '',
+    apptoken: '',
+    tableid: ''
   }
 })

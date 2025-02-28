@@ -40,7 +40,7 @@ Page({
       const { productCode, taskNumber, batchNumber, drawingNumber, productName, employeeName, selectedProcess, endTime } = this.data;
       const endTimestamp = new Date(endTime).getTime();
       wx.request({
-        url: `https://open.feishu.cn/open-apis/bitable/v1/apps/DophbeShaaRCFysppoPcY0m4nre/tables/tblEKWjU7T5SQKBH/records/search`,
+        url: `https://open.feishu.cn/open-apis/bitable/v1/apps/${app.globalData.apptoken}/tables/${app.globalData.tableid}/records/search`,
         method: 'POST',
         header: {
             Authorization: `Bearer ${getApp().globalData.tenantAccessToken}`,
@@ -63,41 +63,47 @@ Page({
                   {
                     field_name: "工序",
                     operator: "is",
-                    value: [selectedProcess]
+                    value: [selectedProcess.split(' (')[0]]
                   }
                 ]
             }
         },
         success(res1) {
-            wx.request({
-                url: `https://open.feishu.cn/open-apis/bitable/v1/apps/DophbeShaaRCFysppoPcY0m4nre/tables/tblEKWjU7T5SQKBH/records/${res1.data.data.items[0].record_id}`,
-                method: 'PUT',
-                header: {
-                    Authorization: `Bearer ${getApp().globalData.tenantAccessToken}`,
-                    'Content-Type': 'application/json; charset=utf-8',
-                },
-                data: {
-                    fields: {
-                        // '产品代码': productCode,
-                        // '任务号': taskNumber,
-                        // '批次号': batchNumber,
-                        // '图号': drawingNumber,
-                        // '产品名称': productName,
-                        // '员工ID': employeeName,
-                        // '设备ID': deviceId,
-                        // '工序': selectedProcess,
-                        '完成时间': endTimestamp,
-                        '状态': '3', // 状态字段赋值3
+            if (res1.data.data.items.length > 0) {
+                wx.request({
+                    url: `https://open.feishu.cn/open-apis/bitable/v1/apps/${app.globalData.apptoken}/tables/${app.globalData.tableid}/records/${res1.data.data.items[0].record_id}`,
+                    method: 'PUT',
+                    header: {
+                        Authorization: `Bearer ${getApp().globalData.tenantAccessToken}`,
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+                    data: {
+                        fields: {
+                            // '产品代码': productCode,
+                            // '任务号': taskNumber,
+                            // '批次号': batchNumber,
+                            // '图号': drawingNumber,
+                            // '产品名称': productName,
+                            // '员工ID': employeeName,
+                            // '设备ID': deviceId,
+                            // '工序': selectedProcess,
+                            '完成时间': endTimestamp,
+                            '状态': '3', // 状态字段赋值3
+                        }
+                    },
+                    success(res) {
+                        wx.showToast({ title: '提交成功' });
+                        setTimeout(() => {
+                            wx.navigateBack();
+                        }, 1000);
+                    },
+                    fail(err) {
+                    wx.showToast({ title: '提交失败', icon: 'none' });
                     }
-                },
-                success(res) {
-                  wx.showToast({ title: '提交成功' });
-                  wx.navigateBack();
-                },
-                fail(err) {
-                  wx.showToast({ title: '提交失败', icon: 'none' });
-                }
-              });
+                });
+            } else {
+                wx.showToast({ title: '没有开工数据', icon: 'none' });
+            }
         },
         fail(err) {
           wx.showToast({ title: '查询失败', icon: 'none' });

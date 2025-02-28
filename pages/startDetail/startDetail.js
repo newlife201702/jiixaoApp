@@ -43,37 +43,81 @@ Page({
     // 提交
     submit() {
         console.log('this.data', this.data);
+        const app = getApp();
       const { productCode, taskNumber, batchNumber, drawingNumber, productName, employeeName, deviceId, selectedProcess, startTime } = this.data;
       // 将开始时间转换为 Unix 时间戳
       const startTimestamp = new Date(startTime).getTime();
       wx.request({
-        url: `https://open.feishu.cn/open-apis/bitable/v1/apps/DophbeShaaRCFysppoPcY0m4nre/tables/tblEKWjU7T5SQKBH/records`,
+        url: `https://open.feishu.cn/open-apis/bitable/v1/apps/${app.globalData.apptoken}/tables/${app.globalData.tableid}/records/search`,
         method: 'POST',
         header: {
-            Authorization: `Bearer ${getApp().globalData.tenantAccessToken}`,
+            Authorization: `Bearer ${app.globalData.tenantAccessToken}`,
             'Content-Type': 'application/json; charset=utf-8',
         },
         data: {
-            fields: {
-                '产品代码': productCode,
-                '任务号': taskNumber,
-                '批次号': batchNumber,
-                '图号': drawingNumber,
-                '产品名称': productName,
-                '员工ID': employeeName,
-                '设备ID': deviceId,
-                '工序': selectedProcess,
-                '开始时间': startTimestamp,
-                '状态': '1', // 状态字段赋值1
+            filter: {
+                conjunction: "and",
+                conditions: [
+                  {
+                    field_name: "任务号",
+                    operator: "is",
+                    value: [taskNumber]
+                  },
+                  {
+                    field_name: "批次号",
+                    operator: "is",
+                    value: [batchNumber]
+                  },
+                  {
+                    field_name: "工序",
+                    operator: "is",
+                    value: [selectedProcess.split(' (')[0]]
+                  }
+                ]
             }
         },
-        success(res) {
-          wx.showToast({ title: '提交成功' });
-          wx.navigateBack();
+        success(res1) {
+            if (res1.data.data.items.length === 0) {
+                wx.request({
+                    url: `https://open.feishu.cn/open-apis/bitable/v1/apps/${app.globalData.apptoken}/tables/${app.globalData.tableid}/records`,
+                    method: 'POST',
+                    header: {
+                        Authorization: `Bearer ${getApp().globalData.tenantAccessToken}`,
+                        'Content-Type': 'application/json; charset=utf-8',
+                    },
+                    data: {
+                        fields: {
+                            '产品代码': productCode,
+                            '任务号': taskNumber,
+                            '批次号': batchNumber,
+                            '图号': drawingNumber,
+                            '产品名称': productName,
+                            '员工ID': employeeName,
+                            '设备ID': deviceId,
+                            '工序': selectedProcess.split(' (')[0],
+                            '工序编号': selectedProcess.split(' (')[1].replace(')', ''),
+                            '开始时间': startTimestamp,
+                            '状态': '1', // 状态字段赋值1
+                            '是否同步': 0
+                        }
+                    },
+                    success(res) {
+                        wx.showToast({ title: '提交成功' });
+                        setTimeout(() => {
+                            wx.navigateBack();
+                        }, 1000);
+                    },
+                    fail(err) {
+                        wx.showToast({ title: '提交失败', icon: 'none' });
+                    }
+                });
+            } else {
+                wx.showToast({ title: '已有开工数据', icon: 'none' });
+            }
         },
         fail(err) {
-          wx.showToast({ title: '提交失败', icon: 'none' });
+        wx.showToast({ title: '查询失败', icon: 'none' });
         }
-      });
+        });
     }
   });
