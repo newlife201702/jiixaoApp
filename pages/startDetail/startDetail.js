@@ -45,8 +45,13 @@ Page({
         console.log('this.data', this.data);
         const app = getApp();
       const { productCode, taskNumber, batchNumber, drawingNumber, productName, employeeName, deviceId, selectedProcess, startTime } = this.data;
+      if (!selectedProcess || !startTime) {
+        wx.showToast({ title: '请完整填写信息', icon: 'none' });
+        return;
+      }
       // 将开始时间转换为 Unix 时间戳
       const startTimestamp = new Date(startTime).getTime();
+      console.log('startTimestamp', startTimestamp);
       wx.request({
         url: `https://open.feishu.cn/open-apis/bitable/v1/apps/${app.globalData.apptoken}/tables/${app.globalData.tableid}/records/search`,
         method: 'POST',

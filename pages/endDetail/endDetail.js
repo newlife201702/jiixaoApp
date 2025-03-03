@@ -37,7 +37,12 @@ Page({
     },
     // 提交
     submit() {
+        const app = getApp();
       const { productCode, taskNumber, batchNumber, drawingNumber, productName, employeeName, selectedProcess, endTime } = this.data;
+      if (!selectedProcess || !endTime) {
+        wx.showToast({ title: '请完整填写信息', icon: 'none' });
+        return;
+      }
       const endTimestamp = new Date(endTime).getTime();
       wx.request({
         url: `https://open.feishu.cn/open-apis/bitable/v1/apps/${app.globalData.apptoken}/tables/${app.globalData.tableid}/records/search`,
