@@ -9,6 +9,7 @@ Page({
       processList: [], // 工序列表
       selectedProcess: '', // 选择的工序
       quantity: '', // 完成数量
+      isButtonDisabled: false, // 默认不禁用按钮
     },
     onLoad(options) {
       const qrCodeData = JSON.parse(options.qrCodeData); // 解析二维码数据
@@ -37,6 +38,8 @@ Page({
     },
     // 提交
     submit() {
+        const that = this;
+        this.setData({ isButtonDisabled: true });
         const app = getApp();
       const { productCode, taskNumber, batchNumber, drawingNumber, productName, employeeName, selectedProcess, quantity } = this.data;
       if (!selectedProcess || !quantity) {
@@ -102,6 +105,7 @@ Page({
                     }
                 },
                 success(res) {
+                    that.setData({ isButtonDisabled: false });
                     wx.showToast({ title: '提交成功' });
                     setTimeout(() => {
                         wx.navigateBack();

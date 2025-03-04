@@ -9,6 +9,7 @@ Page({
       processList: [], // 工序列表
       selectedProcess: '', // 选择的工序
       endTime: '', // 完成时间
+      isButtonDisabled: false, // 默认不禁用按钮
     },
     onLoad(options) {
       const qrCodeData = JSON.parse(options.qrCodeData); // 解析二维码数据
@@ -17,6 +18,12 @@ Page({
         if (qrCodeData[i] === '') break; // 遇到空值停止
         processList.push(`${qrCodeData[i]} (${qrCodeData[i + 1]})`);
       }
+      // 获取当天日期，格式为 YYYY-MM-DD
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); // 月份从 0 开始，需要加 1
+    const day = String(today.getDate()).padStart(2, '0');
+    const todayStr = `${year}-${month}-${day}`;
       this.setData({
         productCode: qrCodeData[0],
         taskNumber: qrCodeData[1],
@@ -25,6 +32,7 @@ Page({
         productName: qrCodeData[4],
         processList,
         employeeName: getApp().globalData.employeeName, // 从全局数据获取员工姓名
+        endTime: todayStr, // 设置完成时间的默认值为当天
       });
     },
     // 选择工序
@@ -37,6 +45,8 @@ Page({
     },
     // 提交
     submit() {
+        const that = this;
+        this.setData({ isButtonDisabled: true });
         const app = getApp();
       const { productCode, taskNumber, batchNumber, drawingNumber, productName, employeeName, selectedProcess, endTime } = this.data;
       if (!selectedProcess || !endTime) {
@@ -97,6 +107,7 @@ Page({
                         }
                     },
                     success(res) {
+                        that.setData({ isButtonDisabled: false });
                         wx.showToast({ title: '提交成功' });
                         setTimeout(() => {
                             wx.navigateBack();
