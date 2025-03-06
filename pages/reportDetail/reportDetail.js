@@ -102,6 +102,7 @@ Page({
                         // '工序': selectedProcess,
                         '完成数量': reportCount + Number(quantity),
                         '状态': '2', // 状态字段赋值2
+                        '是否同步': 0
                     }
                 },
                 success(res) {

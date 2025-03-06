@@ -104,6 +104,7 @@ Page({
                             // '工序': selectedProcess,
                             '完成时间': endTimestamp,
                             '状态': '3', // 状态字段赋值3
+                            '是否同步': 0
                         }
                     },
                     success(res) {
